@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>それ、AIっぽくない？</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">&#x1F9D0;</span>
+        <h1>それ、AIっぽくない？</h1>
+      </div>
+      <p class="subtitle">あなたの文章、ちょっとチェックしてみませんか？</p>
+    </header>
+
+    <main class="main">
+      <div class="input-section">
+        <div class="field">
+          <label for="title-input">タイトル</label>
+          <input type="text" id="title-input" placeholder="記事やブログのタイトルを入力...">
+        </div>
+        <div class="field">
+          <label for="body-input">本文</label>
+          <textarea id="body-input" rows="12" placeholder="チェックしたい本文を貼り付けてください..."></textarea>
+        </div>
+        <button id="diagnose-btn" class="diagnose-btn" onclick="runDiagnosis()">
+          <span class="btn-icon">&#x1F50D;</span> 診断する
+        </button>
+      </div>
+
+      <div id="result-section" class="result-section hidden">
+        <div class="result-header">
+          <h2>診断結果</h2>
+          <div class="score-circle" id="score-circle">
+            <span class="score-number" id="score-number">0</span>
+            <span class="score-unit">%</span>
+          </div>
+          <p class="score-label" id="score-label">AIっぽさ</p>
+          <p class="score-comment" id="score-comment"></p>
+        </div>
+
+        <div class="category-summary" id="category-summary"></div>
+
+        <div class="details" id="details"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>※ これはルールベースの簡易チェッカーです。AIは使用していません。</p>
+      <p>プライバシーと安全性</p>
+      <p>入力された文章はすべてブラウザ内で処理されます。サーバーへの送信・保存は一切行っていません。</p>
+      <div class="footer-book">
+        <p class="book-label">&#x1F4D6; 作者の本</p>
+        <a href="https://amzn.to/3MKb06c" target="_blank" rel="noopener noreferrer" class="book-link">UXデザインを迷子から救う基礎思考 — UXの視点が身につく本</a>
+        <a href="https://amzn.to/4kV2Zbd" target="_blank" rel="noopener noreferrer" class="book-link">AI相棒とKindleのセルフ出版で本を作ってみた</a>
+      </div>
+      <p class="copyright">&copy; 2026 Eri AI Design. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="checker.js"></script>
+</body>
+</html>
