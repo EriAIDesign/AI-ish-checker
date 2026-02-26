@@ -563,6 +563,9 @@ function renderResults(score, allResults) {
     `;
   }).join('');
 
+  // コピー用データを保存
+  window._lastResult = { score, allResults };
+
   // スクロール
   section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -583,6 +586,71 @@ function animateScore(el, target) {
 function toggleGroup(header) {
   const group = header.parentElement;
   group.classList.toggle('open');
+}
+
+function copyResult() {
+  if (!window._lastResult) return;
+  const { score, allResults } = window._lastResult;
+
+  const catLabels = [
+    { key: 'assertive', label: '断定型' },
+    { key: 'structure', label: '三段構成' },
+    { key: 'connectors', label: '接続詞' },
+    { key: 'fakeEmotion', label: '感情表現' },
+  ];
+
+  const summary = catLabels.map(c => {
+    const count = allResults[c.key].length;
+    if (count === 0) return `${c.label}：-`;
+    return `${c.label}：${count}件`;
+  }).join(' / ');
+
+  const comment = getScoreComment(score);
+
+  const text = [
+    `\u{1F9D0} それ、AIっぽくない？ 診断結果`,
+    ``,
+    `AIっぽさ：${score}%`,
+    `${comment}`,
+    ``,
+    summary,
+  ].join('\n');
+
+  copyToClipboard(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.innerHTML = '<span class="copy-icon">\u2705</span> コピーしました！';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = '<span class="copy-icon">\u{1F4CB}</span> 結果をコピー';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  }
+  return fallbackCopy(text);
+}
+
+function fallbackCopy(text) {
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      resolve();
+    } catch (e) {
+      reject(e);
+    } finally {
+      document.body.removeChild(ta);
+    }
+  });
 }
 
 function escapeHtml(str) {
